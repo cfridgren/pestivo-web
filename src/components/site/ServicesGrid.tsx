@@ -1,5 +1,5 @@
 import { Link, useParams } from "@tanstack/react-router";
-import { ArrowRight, Bed, Bug, Rat, Shield, Spray, TreePine, type LucideIcon } from "lucide-react";
+import { ArrowRight, Bed, Bug, Rat, Shield, SprayCan, TreePine, type LucideIcon } from "lucide-react";
 import { SERVICES, SECTION_SLUGS } from "@/content/site";
 import { safeLang, t } from "@/lib/i18n";
 
@@ -8,7 +8,7 @@ const ICONS: Record<string, LucideIcon> = {
   bug: Bug,
   bed: Bed,
   tree: TreePine,
-  spray: Spray,
+  spray: SprayCan,
   shield: Shield,
 };
 
