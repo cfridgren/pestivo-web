@@ -9,10 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as LangRouteImport } from './routes/$lang'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LangIndexRouteImport } from './routes/$lang.index'
+import { Route as LangSectionRouteImport } from './routes/$lang.$section'
+import { Route as LangSectionSlugRouteImport } from './routes/$lang.$section.$slug'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LangRoute = LangRouteImport.update({
   id: '/$lang',
   path: '/$lang',
@@ -28,37 +36,82 @@ const LangIndexRoute = LangIndexRouteImport.update({
   path: '/',
   getParentRoute: () => LangRoute,
 } as any)
+const LangSectionRoute = LangSectionRouteImport.update({
+  id: '/$section',
+  path: '/$section',
+  getParentRoute: () => LangRoute,
+} as any)
+const LangSectionSlugRoute = LangSectionSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => LangSectionRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$lang': typeof LangRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/$lang/$section': typeof LangSectionRouteWithChildren
   '/$lang/': typeof LangIndexRoute
+  '/$lang/$section/$slug': typeof LangSectionSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/$lang/$section': typeof LangSectionRouteWithChildren
   '/$lang': typeof LangIndexRoute
+  '/$lang/$section/$slug': typeof LangSectionSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/$lang': typeof LangRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/$lang/$section': typeof LangSectionRouteWithChildren
   '/$lang/': typeof LangIndexRoute
+  '/$lang/$section/$slug': typeof LangSectionSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/$lang' | '/$lang/'
+  fullPaths:
+    | '/'
+    | '/$lang'
+    | '/sitemap.xml'
+    | '/$lang/$section'
+    | '/$lang/'
+    | '/$lang/$section/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/$lang'
-  id: '__root__' | '/' | '/$lang' | '/$lang/'
+  to:
+    | '/'
+    | '/sitemap.xml'
+    | '/$lang/$section'
+    | '/$lang'
+    | '/$lang/$section/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/$lang'
+    | '/sitemap.xml'
+    | '/$lang/$section'
+    | '/$lang/'
+    | '/$lang/$section/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LangRoute: typeof LangRouteWithChildren
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/$lang': {
       id: '/$lang'
       path: '/$lang'
@@ -80,14 +133,42 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LangIndexRouteImport
       parentRoute: typeof LangRoute
     }
+    '/$lang/$section': {
+      id: '/$lang/$section'
+      path: '/$section'
+      fullPath: '/$lang/$section'
+      preLoaderRoute: typeof LangSectionRouteImport
+      parentRoute: typeof LangRoute
+    }
+    '/$lang/$section/$slug': {
+      id: '/$lang/$section/$slug'
+      path: '/$slug'
+      fullPath: '/$lang/$section/$slug'
+      preLoaderRoute: typeof LangSectionSlugRouteImport
+      parentRoute: typeof LangSectionRoute
+    }
   }
 }
 
+interface LangSectionRouteChildren {
+  LangSectionSlugRoute: typeof LangSectionSlugRoute
+}
+
+const LangSectionRouteChildren: LangSectionRouteChildren = {
+  LangSectionSlugRoute: LangSectionSlugRoute,
+}
+
+const LangSectionRouteWithChildren = LangSectionRoute._addFileChildren(
+  LangSectionRouteChildren,
+)
+
 interface LangRouteChildren {
+  LangSectionRoute: typeof LangSectionRouteWithChildren
   LangIndexRoute: typeof LangIndexRoute
 }
 
 const LangRouteChildren: LangRouteChildren = {
+  LangSectionRoute: LangSectionRouteWithChildren,
   LangIndexRoute: LangIndexRoute,
 }
 
@@ -96,6 +177,7 @@ const LangRouteWithChildren = LangRoute._addFileChildren(LangRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LangRoute: LangRouteWithChildren,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
