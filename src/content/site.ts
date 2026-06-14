@@ -5,10 +5,10 @@ export type Lang = "fr" | "en";
 export const LANGS: Lang[] = ["fr", "en"];
 
 export const BRAND = {
-  name: "Anti Nuisibles Kin",
+  name: "Pestivo Services",
   whatsappNumber: "243000000000", // placeholder
   phoneNumber: "+243000000000",
-  email: "contact@antinuisibleskin.cd",
+  email: "contact@pestivoservices.com",
   city: "Kinshasa",
   country: "CD",
 };
@@ -334,7 +334,7 @@ export const T = {
     sections: {
       problemTitle: "Un problème de nuisibles peut vite devenir un risque pour votre santé, votre image et votre activité",
       problemBody:
-        "Rats, cafards, moustiques, fourmis, termites et punaises de lit affectent les maisons, restaurants, hôtels, magasins, dépôts et bureaux à Kinshasa. Anti Nuisibles Kin vous accompagne avec une méthode professionnelle, préventive et discrète.",
+        "Rats, cafards, moustiques, fourmis, termites et punaises de lit affectent les maisons, restaurants, hôtels, magasins, dépôts et bureaux à Kinshasa. Pestivo Services vous accompagne avec une méthode professionnelle, préventive et discrète.",
       servicesTitle: "Nos services",
       servicesSub: "Traitements ciblés pour particuliers et entreprises à Kinshasa.",
       customersTitle: "Pour qui nous travaillons",
@@ -391,7 +391,7 @@ export const T = {
       contactOptions: ["WhatsApp", "Appel", "Email"],
     },
     footer: {
-      tagline: "Dératisation • Désinsectisation • Désinfection à Kinshasa",
+      tagline: "Anti-nuisibles • Hygiène",
       services: "Services",
       customers: "Clients",
       locations: "Zones",
@@ -438,7 +438,7 @@ export const T = {
     sections: {
       problemTitle: "A pest problem can quickly threaten your health, your image and your business",
       problemBody:
-        "Rats, cockroaches, mosquitoes, ants, termites and bed bugs affect homes, restaurants, hotels, shops, warehouses and offices in Kinshasa. Anti Nuisibles Kin supports you with a professional, preventive and discreet method.",
+        "Rats, cockroaches, mosquitoes, ants, termites and bed bugs affect homes, restaurants, hotels, shops, warehouses and offices in Kinshasa. Pestivo Services supports you with a professional, preventive and discreet method.",
       servicesTitle: "Our services",
       servicesSub: "Targeted treatments for homes and businesses in Kinshasa.",
       customersTitle: "Who we work for",
