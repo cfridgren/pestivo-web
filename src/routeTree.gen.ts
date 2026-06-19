@@ -15,6 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as LangIndexRouteImport } from './routes/$lang.index'
 import { Route as LangSectionRouteImport } from './routes/$lang.$section'
 import { Route as LangCasSlugRouteImport } from './routes/$lang.cas.$slug'
+import { Route as LangCampaignsSlugRouteImport } from './routes/$lang.campaigns.$slug'
 import { Route as LangSectionSlugRouteImport } from './routes/$lang.$section.$slug'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
@@ -47,6 +48,11 @@ const LangCasSlugRoute = LangCasSlugRouteImport.update({
   path: '/cas/$slug',
   getParentRoute: () => LangRoute,
 } as any)
+const LangCampaignsSlugRoute = LangCampaignsSlugRouteImport.update({
+  id: '/campaigns/$slug',
+  path: '/campaigns/$slug',
+  getParentRoute: () => LangRoute,
+} as any)
 const LangSectionSlugRoute = LangSectionSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -60,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/$lang/$section': typeof LangSectionRouteWithChildren
   '/$lang/': typeof LangIndexRoute
   '/$lang/$section/$slug': typeof LangSectionSlugRoute
+  '/$lang/campaigns/$slug': typeof LangCampaignsSlugRoute
   '/$lang/cas/$slug': typeof LangCasSlugRoute
 }
 export interface FileRoutesByTo {
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/$lang/$section': typeof LangSectionRouteWithChildren
   '/$lang': typeof LangIndexRoute
   '/$lang/$section/$slug': typeof LangSectionSlugRoute
+  '/$lang/campaigns/$slug': typeof LangCampaignsSlugRoute
   '/$lang/cas/$slug': typeof LangCasSlugRoute
 }
 export interface FileRoutesById {
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/$lang/$section': typeof LangSectionRouteWithChildren
   '/$lang/': typeof LangIndexRoute
   '/$lang/$section/$slug': typeof LangSectionSlugRoute
+  '/$lang/campaigns/$slug': typeof LangCampaignsSlugRoute
   '/$lang/cas/$slug': typeof LangCasSlugRoute
 }
 export interface FileRouteTypes {
@@ -89,6 +98,7 @@ export interface FileRouteTypes {
     | '/$lang/$section'
     | '/$lang/'
     | '/$lang/$section/$slug'
+    | '/$lang/campaigns/$slug'
     | '/$lang/cas/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -97,6 +107,7 @@ export interface FileRouteTypes {
     | '/$lang/$section'
     | '/$lang'
     | '/$lang/$section/$slug'
+    | '/$lang/campaigns/$slug'
     | '/$lang/cas/$slug'
   id:
     | '__root__'
@@ -106,6 +117,7 @@ export interface FileRouteTypes {
     | '/$lang/$section'
     | '/$lang/'
     | '/$lang/$section/$slug'
+    | '/$lang/campaigns/$slug'
     | '/$lang/cas/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -159,6 +171,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LangCasSlugRouteImport
       parentRoute: typeof LangRoute
     }
+    '/$lang/campaigns/$slug': {
+      id: '/$lang/campaigns/$slug'
+      path: '/campaigns/$slug'
+      fullPath: '/$lang/campaigns/$slug'
+      preLoaderRoute: typeof LangCampaignsSlugRouteImport
+      parentRoute: typeof LangRoute
+    }
     '/$lang/$section/$slug': {
       id: '/$lang/$section/$slug'
       path: '/$slug'
@@ -184,12 +203,14 @@ const LangSectionRouteWithChildren = LangSectionRoute._addFileChildren(
 interface LangRouteChildren {
   LangSectionRoute: typeof LangSectionRouteWithChildren
   LangIndexRoute: typeof LangIndexRoute
+  LangCampaignsSlugRoute: typeof LangCampaignsSlugRoute
   LangCasSlugRoute: typeof LangCasSlugRoute
 }
 
 const LangRouteChildren: LangRouteChildren = {
   LangSectionRoute: LangSectionRouteWithChildren,
   LangIndexRoute: LangIndexRoute,
+  LangCampaignsSlugRoute: LangCampaignsSlugRoute,
   LangCasSlugRoute: LangCasSlugRoute,
 }
 

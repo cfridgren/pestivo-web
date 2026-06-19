@@ -10,6 +10,7 @@ import {
   Sparkles,
 } from "lucide-react";
 
+import { CampaignPromo } from "@/components/site/CampaignPromo";
 import { CasesGrid } from "@/components/site/CasesGrid";
 import { CTASection } from "@/components/site/CTASection";
 import { CustomersGrid } from "@/components/site/CustomersGrid";
@@ -242,6 +243,8 @@ function HomePage() {
 
       <CasesGrid />
 
+      <CampaignPromo />
+
       <section className="bg-background px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <SectionTitle
@@ -327,8 +330,16 @@ function HomePage() {
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Button asChild size="lg" className="rounded-xl font-bold">
-                <Link to={`/${lang}/${SECTION_SLUGS[lang].contact}`}>
-                  {tt.cta.monthlyContract}
+                <Link
+                  to={
+                    lang === "en"
+                      ? "/en/campaigns/monthly-pest-control"
+                      : "/fr/campaigns/abonnement-anti-nuisibles"
+                  }
+                >
+                  {lang === "en"
+                    ? "View monthly contract"
+                    : "Voir le contrat mensuel"}
                 </Link>
               </Button>
 
