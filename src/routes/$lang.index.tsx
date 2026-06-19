@@ -1,27 +1,49 @@
-import { Link, createFileRoute } from "@tanstack/react-router";
-import { ArrowRight, Calendar, ClipboardList, MessageCircle, Phone, ShieldCheck, Sparkles, AlertTriangle } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import {
+  AlertTriangle,
+  ArrowRight,
+  Calendar,
+  ClipboardList,
+  MessageCircle,
+  Phone,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
+
+import { CasesGrid } from "@/components/site/CasesGrid";
+import { CTASection } from "@/components/site/CTASection";
+import { CustomersGrid } from "@/components/site/CustomersGrid";
+import { FAQ } from "@/components/site/FAQ";
 import { Hero } from "@/components/site/Hero";
+import { PricingBlock } from "@/components/site/PricingBlock";
 import { SectionTitle } from "@/components/site/SectionTitle";
 import { ServicesGrid } from "@/components/site/ServicesGrid";
-import { CustomersGrid } from "@/components/site/CustomersGrid";
-import { PricingBlock } from "@/components/site/PricingBlock";
-import { FAQ } from "@/components/site/FAQ";
-import { CTASection } from "@/components/site/CTASection";
 import { Button } from "@/components/ui/button";
-import { BRAND, COMMUNES, BLOG_POSTS, SECTION_SLUGS, STEPS, WHATSAPP_URL, FAQS } from "@/content/site";
+import {
+  BLOG_POSTS,
+  BRAND,
+  COMMUNES,
+  FAQS,
+  SECTION_SLUGS,
+  STEPS,
+  WHATSAPP_URL,
+} from "@/content/site";
 import { safeLang, t } from "@/lib/i18n";
 
 export const Route = createFileRoute("/$lang/")({
   head: ({ params }) => {
     const lang = safeLang(params.lang);
+
     const title =
       lang === "fr"
-        ? `Dératisation, désinsectisation et désinfection à Kinshasa — ${BRAND.name}`
-        : `Pest control in Kinshasa for homes and businesses — ${BRAND.name}`;
+        ? `Dératisation & désinsectisation à Kinshasa — ${BRAND.name}`
+        : `Pest control and disinfection in Kinshasa — ${BRAND.name}`;
+
     const description =
       lang === "fr"
-        ? "Traitement professionnel contre cafards, rats, moustiques, fourmis, punaises et termites à Kinshasa. Inspection gratuite, prix clair, suivi après intervention."
-        : "Professional treatment for cockroaches, rats, mosquitoes, ants, bed bugs and termites in Kinshasa. Free inspection, clear pricing and post-treatment follow-up.";
+        ? "Pestivo Services intervient contre cafards, rats, moustiques, punaises, termites et fourmis à Kinshasa. Inspection gratuite, prix clair et suivi après traitement."
+        : "Pestivo Services treats cockroaches, rats, mosquitoes, bed bugs, termites and ants in Kinshasa. Free inspection, clear pricing and post-treatment follow-up.";
+
     return {
       meta: [
         { title },
@@ -30,6 +52,8 @@ export const Route = createFileRoute("/$lang/")({
         { property: "og:description", content: description },
         { property: "og:url", content: `/${lang}` },
         { property: "og:type", content: "website" },
+        { property: "og:site_name", content: BRAND.name },
+        { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: title },
         { name: "twitter:description", content: description },
       ],
@@ -39,11 +63,58 @@ export const Route = createFileRoute("/$lang/")({
           type: "application/ld+json",
           children: JSON.stringify({
             "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            name: BRAND.name,
+            description,
+            areaServed: "Kinshasa",
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: "Kinshasa",
+              addressCountry: "CD",
+            },
+            contactPoint: {
+              "@type": "ContactPoint",
+              telephone: BRAND.phoneNumber,
+              contactType: "customer service",
+              availableLanguage: ["fr", "en"],
+            },
+            serviceType:
+              lang === "fr"
+                ? [
+                    "Dératisation",
+                    "Désinsectisation",
+                    "Désinfection",
+                    "Traitement cafards",
+                    "Traitement rats",
+                    "Traitement moustiques",
+                    "Traitement punaises de lit",
+                    "Traitement termites",
+                  ]
+                : [
+                    "Pest control",
+                    "Rodent control",
+                    "Insect control",
+                    "Disinfection",
+                    "Cockroach control",
+                    "Rat control",
+                    "Mosquito control",
+                    "Bed bug treatment",
+                    "Termite treatment",
+                  ],
+          }),
+        },
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
             "@type": "FAQPage",
             mainEntity: FAQS[lang].slice(0, 6).map((f) => ({
               "@type": "Question",
               name: f.q,
-              acceptedAnswer: { "@type": "Answer", text: f.a },
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: f.a,
+              },
             })),
           }),
         },
@@ -58,237 +129,363 @@ function HomePage() {
   const lang = safeLang(raw);
   const tt = t(lang);
 
+  const benefitCards = [
+    {
+      k: lang === "fr" ? "Hygiène" : "Hygiene",
+      v: lang === "fr" ? "Protégée" : "Protected",
+    },
+    {
+      k: lang === "fr" ? "Réputation" : "Reputation",
+      v: lang === "fr" ? "Préservée" : "Preserved",
+    },
+    {
+      k: lang === "fr" ? "Stock" : "Stock",
+      v: lang === "fr" ? "Sécurisé" : "Secured",
+    },
+    {
+      k: lang === "fr" ? "Confort" : "Comfort",
+      v: lang === "fr" ? "Restauré" : "Restored",
+    },
+  ];
+
+  const monthlyStats = [
+    {
+      k: lang === "fr" ? "Visites/mois" : "Visits/mo",
+      v: "1–4",
+    },
+    {
+      k: lang === "fr" ? "Rapport" : "Report",
+      v: "WhatsApp",
+    },
+    {
+      k: lang === "fr" ? "Discrétion" : "Discretion",
+      v: lang === "fr" ? "Totale" : "Full",
+    },
+    {
+      k: lang === "fr" ? "Prix" : "Price",
+      v: lang === "fr" ? "dès 50$/mois" : "from $50/mo",
+    },
+  ];
+
   return (
     <>
       <Hero />
 
-      {/* Trust strip */}
-      <section className="border-y border-border bg-surface">
-        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-6 gap-y-3 px-4 py-6 text-sm font-medium text-foreground sm:grid-cols-3 sm:px-6 lg:grid-cols-4">
+      <section className="border-y border-border bg-background">
+        <div className="mx-auto grid max-w-7xl gap-3 px-4 py-5 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
           {tt.trust.slice(0, 4).map((item) => (
-            <div key={item} className="flex items-center gap-2">
-              <span className="grid size-6 place-items-center rounded-full bg-primary/15 text-primary">
-                <ShieldCheck className="size-3.5" />
+            <div
+              key={item}
+              className="flex items-center gap-3 rounded-2xl bg-secondary/60 px-4 py-3"
+            >
+              <ShieldCheck className="size-5 shrink-0 text-primary" />
+              <span className="text-sm font-semibold text-foreground">
+                {item}
               </span>
-              {item}
             </div>
           ))}
         </div>
       </section>
 
-      {/* Problem / solution */}
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
-        <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-center">
+      <section className="bg-background px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_0.8fr] lg:items-center">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-warning/30 px-3 py-1 text-xs font-semibold uppercase tracking-wider">
-              <AlertTriangle className="size-3.5" />
+            <div className="inline-flex items-center gap-2 rounded-full bg-amber-100 px-4 py-2 text-sm font-bold uppercase tracking-[0.12em] text-amber-950">
+              <AlertTriangle className="size-4" />
               {lang === "fr" ? "Pourquoi agir vite" : "Why act fast"}
             </div>
-            <h2 className="mt-4 text-balance font-display text-3xl font-extrabold tracking-tight sm:text-4xl">
+
+            <h2 className="mt-6 max-w-3xl text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
               {tt.sections.problemTitle}
             </h2>
-            <p className="mt-4 text-pretty text-base text-muted-foreground">{tt.sections.problemBody}</p>
-            <p className="mt-3 text-sm text-muted-foreground">{tt.responsibility}</p>
+
+            <p className="mt-6 max-w-3xl text-base leading-8 text-muted-foreground">
+              {tt.sections.problemBody}
+            </p>
+
+            <p className="mt-5 max-w-3xl text-base leading-8 text-muted-foreground">
+              {tt.responsibility}
+            </p>
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            {[
-              { k: lang === "fr" ? "Hygiène" : "Hygiene", v: lang === "fr" ? "Protégée" : "Protected" },
-              { k: lang === "fr" ? "Réputation" : "Reputation", v: lang === "fr" ? "Préservée" : "Preserved" },
-              { k: lang === "fr" ? "Stock" : "Stock", v: lang === "fr" ? "Sécurisé" : "Secured" },
-              { k: lang === "fr" ? "Confort" : "Comfort", v: lang === "fr" ? "Restauré" : "Restored" },
-            ].map((c) => (
-              <div key={c.k} className="rounded-2xl border border-border bg-card p-5">
-                <div className="text-xs uppercase tracking-wider text-muted-foreground">{c.k}</div>
-                <div className="mt-1 font-display text-xl font-bold text-primary">{c.v}</div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            {benefitCards.map((c) => (
+              <div
+                key={c.k}
+                className="rounded-3xl border border-border bg-card p-6 shadow-sm"
+              >
+                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                  {c.k}
+                </p>
+                <p className="mt-3 text-2xl font-extrabold text-primary">
+                  {c.v}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Services */}
-      <section className="bg-surface">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
+      <section className="bg-secondary/45 px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
           <SectionTitle
-            eyebrow={lang === "fr" ? "Nos interventions" : "What we treat"}
+            eyebrow={lang === "fr" ? "Nos interventions" : "Our services"}
             title={tt.sections.servicesTitle}
             sub={tt.sections.servicesSub}
           />
+
           <div className="mt-10">
             <ServicesGrid />
           </div>
         </div>
       </section>
 
-      {/* Customers */}
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
-        <SectionTitle
-          eyebrow={lang === "fr" ? "Pour qui" : "Who we serve"}
-          title={tt.sections.customersTitle}
-          sub={tt.sections.customersSub}
-        />
-        <div className="mt-10">
-          <CustomersGrid />
+      <CasesGrid />
+
+      <section className="bg-background px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <SectionTitle
+            eyebrow={lang === "fr" ? "Clients" : "Customers"}
+            title={tt.sections.customersTitle}
+            sub={tt.sections.customersSub}
+          />
+
+          <div className="mt-10">
+            <CustomersGrid />
+          </div>
         </div>
       </section>
 
-      {/* Pricing */}
-      <section className="bg-surface">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
+      <section className="bg-secondary/45 px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
           <SectionTitle
-            eyebrow={lang === "fr" ? "Tarifs" : "Pricing"}
+            eyebrow={lang === "fr" ? "Prix" : "Pricing"}
             title={tt.sections.pricingTitle}
             sub={tt.sections.pricingSub}
           />
+
           <div className="mt-10">
             <PricingBlock />
           </div>
-          <p className="mt-6 text-center text-xs text-muted-foreground">{tt.safety}</p>
+
+          <p className="mt-8 rounded-2xl border border-border bg-background p-5 text-sm leading-6 text-muted-foreground">
+            {tt.safety}
+          </p>
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
-        <SectionTitle
-          eyebrow={lang === "fr" ? "Processus" : "Process"}
-          title={tt.sections.howTitle}
-        />
-        <ol className="mt-10 grid gap-4 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2">
-          {STEPS.map((s, i) => (
-            <li key={i} className="relative rounded-2xl border border-border bg-card p-5">
-              <div className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground font-display text-sm font-bold">
-                {i + 1}
-              </div>
-              <div className="mt-4 font-display text-base font-bold">{s[lang].title}</div>
-              <p className="mt-1 text-sm text-muted-foreground">{s[lang].desc}</p>
-            </li>
-          ))}
-        </ol>
-      </section>
+      <section className="bg-background px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <SectionTitle
+            eyebrow={lang === "fr" ? "Méthode" : "Method"}
+            title={tt.sections.howTitle}
+            sub={
+              lang === "fr"
+                ? "Une intervention simple, claire et adaptée à votre situation."
+                : "A simple, clear process adapted to your situation."
+            }
+          />
 
-      {/* Monthly business */}
-      <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6">
-        <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-primary/10 via-card to-accent/10 p-8 sm:p-12">
-          <div className="grid items-center gap-8 lg:grid-cols-[1.2fr_1fr]">
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full bg-primary/15 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary">
-                <Calendar className="size-3.5" /> {lang === "fr" ? "Entreprises" : "Businesses"}
-              </div>
-              <h2 className="mt-4 font-display text-3xl font-extrabold tracking-tight sm:text-4xl">
-                {tt.sections.monthlyTitle}
-              </h2>
-              <p className="mt-3 text-muted-foreground">{tt.sections.monthlyBody}</p>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90">
-                  <Link to={`/${lang}/${SECTION_SLUGS[lang].contact}`}>
-                    <ClipboardList className="size-4" />
-                    {tt.cta.monthlyContract}
-                  </Link>
-                </Button>
-                <Button asChild variant="outline">
-                  <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-                    <MessageCircle className="size-4" /> {tt.cta.whatsapp}
-                  </a>
-                </Button>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              {[
-                { k: lang === "fr" ? "Visites/mois" : "Visits/mo", v: "1–4" },
-                { k: lang === "fr" ? "Rapport" : "Report", v: "WhatsApp" },
-                { k: lang === "fr" ? "Discrétion" : "Discretion", v: lang === "fr" ? "Totale" : "Full" },
-                { k: lang === "fr" ? "Prix" : "Price", v: lang === "fr" ? "dès 50$/mois" : "from $50/mo" },
-              ].map((c) => (
-                <div key={c.k} className="rounded-2xl border border-border bg-card p-4">
-                  <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{c.k}</div>
-                  <div className="mt-1 font-display text-lg font-bold">{c.v}</div>
+          <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-5">
+            {STEPS.map((s, i) => (
+              <div
+                key={s[lang].title}
+                className="rounded-3xl border border-border bg-card p-5 shadow-sm"
+              >
+                <div className="flex size-10 items-center justify-center rounded-full bg-primary text-sm font-extrabold text-primary-foreground">
+                  {i + 1}
                 </div>
-              ))}
-            </div>
+
+                <h3 className="mt-5 text-lg font-extrabold tracking-tight text-foreground">
+                  {s[lang].title}
+                </h3>
+
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                  {s[lang].desc}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Locations */}
-      <section className="bg-surface">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
+      <section className="bg-slate-950 px-4 py-16 text-white sm:px-6 lg:px-8">
+        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-bold uppercase tracking-[0.16em] text-white/90">
+              <ClipboardList className="size-4" />
+              {lang === "fr" ? "Entreprises" : "Businesses"}
+            </div>
+
+            <h2 className="mt-6 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
+              {tt.sections.monthlyTitle}
+            </h2>
+
+            <p className="mt-6 max-w-2xl text-base leading-8 text-white/75">
+              {tt.sections.monthlyBody}
+            </p>
+
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Button asChild size="lg" className="rounded-xl font-bold">
+                <Link to={`/${lang}/${SECTION_SLUGS[lang].contact}`}>
+                  {tt.cta.monthlyContract}
+                </Link>
+              </Button>
+
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="rounded-xl border-white/20 bg-white/10 font-bold text-white hover:bg-white/15 hover:text-white"
+              >
+                <a href={WHATSAPP_URL} target="_blank" rel="noreferrer">
+                  <MessageCircle className="mr-2 size-5" />
+                  {tt.cta.whatsapp}
+                </a>
+              </Button>
+            </div>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            {monthlyStats.map((c) => (
+              <div
+                key={c.k}
+                className="rounded-3xl border border-white/10 bg-white/10 p-6 backdrop-blur"
+              >
+                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/60">
+                  {c.k}
+                </p>
+                <p className="mt-3 text-3xl font-extrabold text-white">
+                  {c.v}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-background px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
           <SectionTitle
             eyebrow="Kinshasa"
             title={tt.sections.locationsTitle}
             sub={tt.sections.locationsSub}
           />
-          <div className="mt-10 flex flex-wrap gap-2">
+
+          <div className="mt-10 flex flex-wrap gap-3">
             {COMMUNES.map((c) => (
               <Link
                 key={c}
-                to={`/${lang}/${SECTION_SLUGS[lang].locations}/${c.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
-                className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium hover:border-primary/40 hover:text-primary"
+                to={`/${lang}/${SECTION_SLUGS[lang].locations}/${encodeURIComponent(
+                  c.toLowerCase().replaceAll(" ", "-"),
+                )}`}
+                className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-primary"
               >
                 {c}
-                <ArrowRight className="size-3.5" />
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
-        <SectionTitle
-          eyebrow="FAQ"
-          title={tt.sections.faqTitle}
-          align="center"
-        />
-        <div className="mt-10 mx-auto max-w-3xl">
-          <FAQ limit={6} />
+      <section className="bg-secondary/45 px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <FAQ />
         </div>
       </section>
 
-      {/* Blog preview */}
-      <section className="bg-surface">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
+      <section className="bg-background px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
           <SectionTitle
             eyebrow={lang === "fr" ? "Conseils" : "Advice"}
             title={tt.sections.blogTitle}
             sub={tt.sections.blogSub}
           />
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
+
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
             {BLOG_POSTS.slice(0, 3).map((p) => (
-              <Link
+              <article
                 key={p.slug[lang]}
-                to={`/${lang}/${SECTION_SLUGS[lang].blog}/${p.slug[lang]}`}
-                className="group rounded-2xl border border-border bg-card p-6 transition hover:border-primary/40"
+                className="rounded-3xl border border-border bg-card p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
               >
-                <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-primary">
-                  <Sparkles className="size-3.5" /> {lang === "fr" ? "Conseil" : "Guide"}
-                </div>
-                <h3 className="mt-3 font-display text-lg font-bold">{p.title[lang]}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{p.excerpt[lang]}</p>
-                <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary">
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">
+                  {lang === "fr" ? "Conseil" : "Guide"}
+                </p>
+
+                <h3 className="mt-3 text-xl font-extrabold tracking-tight text-foreground">
+                  {p.title[lang]}
+                </h3>
+
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                  {p.excerpt[lang]}
+                </p>
+
+                <Link
+                  to={`/${lang}/${SECTION_SLUGS[lang].blog}/${p.slug[lang]}`}
+                  className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-primary"
+                >
                   {lang === "fr" ? "Lire" : "Read"}
-                  <ArrowRight className="size-4 transition group-hover:translate-x-0.5" />
-                </span>
-              </Link>
+                  <ArrowRight className="size-4" />
+                </Link>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
-        <CTASection />
-        <div className="mt-6 grid gap-3 sm:grid-cols-3">
-          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card p-4 text-sm font-medium hover:border-primary/40">
-            <MessageCircle className="size-4 text-whatsapp" /> {tt.cta.whatsapp}
-          </a>
-          <a href={`tel:${BRAND.phoneNumber}`} className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card p-4 text-sm font-medium hover:border-primary/40">
-            <Phone className="size-4 text-primary" /> {BRAND.phoneNumber}
-          </a>
-          <Link to={`/${lang}/${SECTION_SLUGS[lang].pricing}`} className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card p-4 text-sm font-medium hover:border-primary/40">
-            <ClipboardList className="size-4 text-primary" /> {tt.cta.viewPricing}
-          </Link>
+      <section className="bg-slate-950 px-4 py-16 text-white sm:px-6 lg:px-8">
+        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-bold uppercase tracking-[0.16em] text-white/90">
+              <Sparkles className="size-4" />
+              {BRAND.name}
+            </div>
+
+            <h2 className="mt-6 max-w-3xl text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
+              {tt.sections.finalCtaTitle}
+            </h2>
+
+            <p className="mt-5 max-w-2xl text-base leading-8 text-white/75">
+              {tt.sections.finalCtaBody}
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+            <Button asChild size="lg" className="rounded-xl font-bold">
+              <a href={WHATSAPP_URL} target="_blank" rel="noreferrer">
+                <MessageCircle className="mr-2 size-5" />
+                {tt.cta.whatsapp}
+              </a>
+            </Button>
+
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="rounded-xl border-white/20 bg-white/10 font-bold text-white hover:bg-white/15 hover:text-white"
+            >
+              <a href={`tel:${BRAND.phoneNumber}`}>
+                <Phone className="mr-2 size-5" />
+                {BRAND.phoneNumber}
+              </a>
+            </Button>
+
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="rounded-xl border-white/20 bg-white/10 font-bold text-white hover:bg-white/15 hover:text-white"
+            >
+              <Link to={`/${lang}/${SECTION_SLUGS[lang].pricing}`}>
+                <Calendar className="mr-2 size-5" />
+                {tt.cta.viewPricing}
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
+
+      <CTASection />
     </>
   );
 }
